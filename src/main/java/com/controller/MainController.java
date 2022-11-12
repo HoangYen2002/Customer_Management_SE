@@ -50,6 +50,39 @@ public class MainController {
 		return customer;
 	}
 	
+	@PostMapping("customer/insert")
+	@ResponseBody
+	public String addCustomer(@RequestBody Customer customer) {
+		Customer newCustomer = new Customer();
+		//newCustomer.setId(customer.getId());
+		newCustomer.setName(customer.getName());
+		newCustomer.setAge(customer.getAge());
+		newCustomer.setPhone_Number(customer.getPhone_Number());
+		newCustomer.setUpdatedAt(new Date());
+		boolean customerInserted = customerService.addCustomer(customer);
+		if(customerInserted) {
+			System.out.println("Add New Customer Successfully.");
+		}
+		return "redirect:/main/customer/list";
+	}
+	
+	
+	@PutMapping(value = {"customer/update/{id}"})
+	public String updateCustomer(@PathVariable("id") int id, @RequestParam("name") String name, @RequestParam("age") int age, 
+			@RequestParam("phone_Number") String phone_Number ) {
+		Customer customer = new Customer();
+		customer.setId(id);
+		customer.setName(name);
+		customer.setAge(age);
+		customer.setPhone_Number(phone_Number);
+		customer.setUpdatedAt(new Date());
+		boolean isUpdated = customerService.updateCustomer(customer);
+		if(isUpdated) {
+			System.out.println("Updated Customer Successfully.");
+		}
+		return "redirect:/main/customer/list";
+	}
+	
 	@DeleteMapping(value = {"customer/delete/{id}"})
 	public String deleteCustomer(@PathVariable("id") int id) {
 		boolean isDeleted = customerService.deleteCustomer(id);
